@@ -1,0 +1,121 @@
+[gd_scene load_steps=11 format=3 uid="uid://jeq8h1l6qb1f"]
+
+[ext_resource type="Texture2D" uid="uid://5ap7ud08afl" path="res://AssetBundle/Sprites/ForestBackground.png" id="1_bceik"]
+[ext_resource type="Script" path="res://Scripts/manager.gd" id="1_sl8wk"]
+[ext_resource type="PackedScene" uid="uid://pojacrnmnn0g" path="res://Sences/player.tscn" id="2_tqxwy"]
+[ext_resource type="PackedScene" uid="uid://c74lmglo5b3d5" path="res://Sences/Slime.tscn" id="3_cgyvn"]
+[ext_resource type="FontFile" uid="uid://b241xx2buwwah" path="res://AssetBundle/Uranus_Pixel_11Px.ttf" id="5_raq8b"]
+[ext_resource type="AudioStream" uid="uid://b841vipft73pw" path="res://AssetBundle/Audio/GameOver.mp3" id="6_bseg2"]
+
+[sub_resource type="WorldBoundaryShape2D" id="WorldBoundaryShape2D_cmscp"]
+distance = -184.0
+
+[sub_resource type="WorldBoundaryShape2D" id="WorldBoundaryShape2D_y18fp"]
+normal = Vector2(1, 0)
+distance = -41.0
+
+[sub_resource type="WorldBoundaryShape2D" id="WorldBoundaryShape2D_5ol32"]
+normal = Vector2(-1, 0)
+distance = -430.0
+
+[sub_resource type="WorldBoundaryShape2D" id="WorldBoundaryShape2D_6lteq"]
+normal = Vector2(0, 1)
+distance = 80.0
+
+[node name="Node2D" type="Node2D" node_paths=PackedStringArray("game_over_label", "score_label")]
+y_sort_enabled = true
+position = Vector2(-195, -57)
+script = ExtResource("1_sl8wk")
+slime_scene = ExtResource("3_cgyvn")
+game_over_label = NodePath("CanvasLayer/Label2")
+score_label = NodePath("CanvasLayer/Label")
+
+[node name="Background1" type="Sprite2D" parent="."]
+position = Vector2(76, 50)
+texture = ExtResource("1_bceik")
+metadata/_edit_lock_ = true
+
+[node name="Background2" type="Sprite2D" parent="."]
+position = Vector2(315, 50)
+texture = ExtResource("1_bceik")
+metadata/_edit_lock_ = true
+
+[node name="Camera2D" type="Camera2D" parent="."]
+position = Vector2(315, 50)
+offset = Vector2(-120.465, 0)
+zoom = Vector2(2.475, 2.475)
+metadata/_edit_lock_ = true
+
+[node name="Player" parent="Camera2D" instance=ExtResource("2_tqxwy")]
+position = Vector2(-292, 86)
+
+[node name="StaticBody2D" type="StaticBody2D" parent="."]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="StaticBody2D"]
+shape = SubResource("WorldBoundaryShape2D_cmscp")
+
+[node name="CollisionShape2D2" type="CollisionShape2D" parent="StaticBody2D"]
+shape = SubResource("WorldBoundaryShape2D_y18fp")
+
+[node name="CollisionShape2D3" type="CollisionShape2D" parent="StaticBody2D"]
+shape = SubResource("WorldBoundaryShape2D_5ol32")
+
+[node name="CollisionShape2D4" type="CollisionShape2D" parent="StaticBody2D"]
+shape = SubResource("WorldBoundaryShape2D_6lteq")
+
+[node name="Timer" type="Timer" parent="."]
+autostart = true
+
+[node name="CanvasLayer" type="CanvasLayer" parent="."]
+
+[node name="Label" type="Label" parent="CanvasLayer"]
+offset_left = 29.0
+offset_top = 20.0
+offset_right = 69.0
+offset_bottom = 43.0
+theme_override_fonts/font = ExtResource("5_raq8b")
+theme_override_font_sizes/font_size = 48
+text = "Score: 0"
+
+[node name="Label2" type="Label" parent="CanvasLayer"]
+visible = false
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -221.5
+offset_top = -50.0
+offset_right = 221.5
+offset_bottom = 50.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_colors/font_outline_color = Color(0.0812449, 0.488284, 0.419125, 1)
+theme_override_constants/outline_size = 45
+theme_override_fonts/font = ExtResource("5_raq8b")
+theme_override_font_sizes/font_size = 100
+text = "Game Over"
+
+[node name="Label3" type="Label" parent="CanvasLayer/Label2"]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.509
+anchor_top = 1.28
+anchor_right = 0.509
+anchor_bottom = 1.28
+offset_left = -121.987
+offset_top = -15.0
+offset_right = 122.013
+offset_bottom = 15.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_colors/font_outline_color = Color(0.0812449, 0.488284, 0.419125, 1)
+theme_override_constants/outline_size = 45
+theme_override_fonts/font = ExtResource("5_raq8b")
+theme_override_font_sizes/font_size = 30
+text = "Made by Flowerwine"
+
+[node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("6_bseg2")
+
+[connection signal="timeout" from="Timer" to="." method="_generate"]
